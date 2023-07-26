@@ -9,6 +9,7 @@
 <hr>
 
 ### Start the API
+The command below will start all services and run the migrations and seeds:
 ```
 cd brain-ag-api
 
@@ -21,20 +22,12 @@ docker-compose up
 <hr>
 
 ### Tests
-Make sure that the Postgres database is up, then:
+Make sure you have run the "docker-compose up" command before, then:
 ```
 cd brain-ag-api
 
-npm run test
+npm run test-docker
 ```
-
-<hr>
-
-### ***Postgres Database***
-* Start: 
-    ```
-    docker-compose up db
-    ```
 
 <hr>
 

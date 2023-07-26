@@ -9,6 +9,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    container_name: api
     command: npm run start
     volumes:
       - .:/app
