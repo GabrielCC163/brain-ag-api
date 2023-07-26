@@ -1,12 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
-import { AppModule } from '../to_be_excluded/app.module';
+import { AppModule } from '../src/app.module';
+import { PlantedCropsEnum } from '@modules/rural-producer/enum';
 
-describe('SubscriptionsController (e2e)', () => {
+describe('RuralProducersController (e2e)', () => {
   let app: INestApplication;
-  const apiKey = 'ss_test_t9KB41SpGQy7Lvg7';
-  let subscriptionTestId: string;
+  let producerTestId: string;
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -18,62 +18,58 @@ describe('SubscriptionsController (e2e)', () => {
     await app.init();
   });
 
-  it('should create a subscription', async () => {
+  it('should create a rural producer', async () => {
     const response = await request(app.getHttpServer())
-      .post('/subscriptions')
+      .post('/rural-producers')
       .send({
-        email: 'elon@email.com',
-        firstName: 'elon',
-        dateOfBirth: '1997-09-22',
-        consent: true,
-        newsletterId: '1' + Math.floor(Math.random() * 1000)
+        document: '51726542000187',
+        name: 'Elon',
+        city: 'San Diego',
+        state: 'CA',
+        farmName: 'Sunshine Farm',
+        farmTotalArea: 200,
+        farmArableArea: 120,
+        farmVegetationArea: 40,
+        plantedCrops: [PlantedCropsEnum.COTTON, PlantedCropsEnum.CORN]
       })
       .set('Accept', 'application/json')
-      .set('apiKey', apiKey)
       .expect(201);
 
     expect(response.body.id).toBeDefined();
-    subscriptionTestId = response.body.id;
+    producerTestId = response.body.id;
   });
 
-  it('should get a list of subscriptions', async () => {
+  it('should get a list of rural producers', async () => {
     const response = await request(app.getHttpServer())
-      .get('/subscriptions')
-      .set('apiKey', apiKey)
+      .get('/rural-producers')
       .expect(200);
 
     expect(response.body.items).toBeDefined()
     expect(response.body.items.length).toBeGreaterThan(0);
   });
 
-  it('shoud get one subscription by ID', async () => {
+  it('should update a rural producer', async () => {
     const response = await request(app.getHttpServer())
-      .get(`/subscriptions/${subscriptionTestId}`)
-      .set('apiKey', apiKey)
+      .put(`/rural-producers/${producerTestId}`)
+      .send({
+        name: 'Elon Musk',
+        city: null
+      })
       .expect(200);
 
-    expect(response.body.id).toBe(subscriptionTestId);
+    expect(response.body.name).toEqual('Elon Musk');
+    expect(response.body.city).toBeDefined();
   });
 
-  it('should cancel a subscription', async () => {
+  it('should remove a rural producer', async () => {
     await request(app.getHttpServer())
-      .delete(`/subscriptions/${subscriptionTestId}`)
-      .set('apiKey', apiKey)
+      .delete(`/rural-producers/${producerTestId}`)
       .expect(204);
 
-    const response = await request(app.getHttpServer())
-      .get(`/subscriptions/${subscriptionTestId}`)
-      .set('apiKey', apiKey)
-      .expect(200);
-
-    expect(response.body).toEqual({});
-  });
-
-  it('shoud return Unauthorized Exception (401)', async () => {
     await request(app.getHttpServer())
-      .get(`/subscriptions/${subscriptionTestId}`)
-      .expect(401);
-  })
+      .get(`/rural-producers/${producerTestId}`)
+      .expect(404);
+  });
 
   afterAll(async () => {
     await app.close();
