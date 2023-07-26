@@ -16,8 +16,16 @@ cd brain-ag-api
 docker-compose up
 ```
 
+<hr>
+
 ### API Documentation
 * Access: http://localhost:3000/docs
+
+
+<hr>
+
+### Run requests in Insomnia
+[![Run in Insomnia}](https://insomnia.rest/images/run.svg)](https://insomnia.rest/run/?label=brain-ag-api&uri=https%3A%2F%2Fgist.githubusercontent.com%2FGabrielCC163%2Ff11e9889b409b0bd2fb80da64e2a13a6%2Fraw%2F4585346aa7c63c9faefd587a81574fec102bab73%2Fgistfile1.txt)
 
 <hr>
 
