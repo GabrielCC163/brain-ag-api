@@ -2,7 +2,7 @@ import { BaseEntity } from '@database/base.entity';
 import { AfterLoad, Column, Entity } from 'typeorm';
 import { PlantedCropsEnum } from '../enum';
 
-@Entity('rural_producer')
+@Entity('rural_producers')
 export class RuralProducerEntity extends BaseEntity {
   @Column({ unique: true })
   document: string;
